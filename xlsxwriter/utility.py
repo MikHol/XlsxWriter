@@ -641,7 +641,8 @@ def datetime_to_excel_datetime(dt_obj, date_1904, remove_timezone):
     # We handle datetime .datetime, .date and .time objects but convert
     # them to datetime.datetime objects and process them in the same way.
     if isinstance(dt_obj, datetime.datetime):
-        dt_obj = remove_datetime_timezone(dt_obj, remove_timezone)
+        if dt_obj.tzinfo is not None:
+            epoch = epoch.replace(tzinfo=dt_obj.tzinfo)
         delta = dt_obj - epoch
     elif isinstance(dt_obj, datetime.date):
         dt_obj = datetime.datetime.fromordinal(dt_obj.toordinal())
